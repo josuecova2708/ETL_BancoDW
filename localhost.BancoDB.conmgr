@@ -1,0 +1,10 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="localhost.BancoDB"
+  DTS:DTSID="{06EB157C-E559-4CC4-92F6-AA9FD41A8C86}"
+  DTS:CreationName="ADO.NET:System.Data.SqlClient.SqlConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:ConnectionString="Data Source=localhost;Initial Catalog=BancoDB;Integrated Security=True;Encrypt=False;TrustServerCertificate=True;Application Name=SSIS-ETL_BancoDW-{06EB157C-E559-4CC4-92F6-AA9FD41A8C86}localhost.BancoDB;" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>
