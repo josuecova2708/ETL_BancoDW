@@ -11,8 +11,8 @@
   DTS:LocaleID="16394"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="25"
-  DTS:VersionGUID="{A83317F4-A65A-4873-86CF-18A7E093589E}">
+  DTS:VersionBuild="38"
+  DTS:VersionGUID="{A777032F-1082-4DF8-BE84-F0C73E6F6D5F}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -2051,11 +2051,11 @@ ORDER BY cal.Fecha;</property>
         WHEN 'INTERBANCARIA' THEN 'Transferencia a otros bancos en Bolivia'
         WHEN 'INTERNACIONAL' THEN 'Transferencia internacional'
         ELSE 'Otro tipo de transferencia'
-    END as Descripcion
+    END AS Descripcion
 FROM operaciones.Transferencia t
-LEFT JOIN [BancoDW].[dbo].[DimTipoTransferencia] dt 
-    ON t.TipoTransferencia = dt.TipoTransferencia
-WHERE dt.TipoTransferencia IS NULL;</property>
+LEFT JOIN  [BancoDW].[dbo].[dimTipoTransferencia] dtt
+    ON t.TipoTransferencia = dtt.TipoTransferencia
+WHERE dtt.TipoTransferencia IS NULL;</property>
                 <property
                   dataType="System.Int32"
                   description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
@@ -2172,6 +2172,496 @@ WHERE dt.TipoTransferencia IS NULL;</property>
         </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\fact_transferencias"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{3076E3DB-8F95-4C9D-9432-70D7B69C1E6E}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="fact_transferencias"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\fact_transferencias\fact_transferencias"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Carga datos en una base de datos compatible con ADO.NET que use una vista o tabla de base de datos. Se cargan datos en una tabla nueva o existente. Por ejemplo, se usa un proveedor ADO.NET para ODBC para cargar datos en un destino ODBC.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;2"
+              description="Carga datos en una base de datos compatible con ADO.NET que use una vista o tabla de base de datos. Se cargan datos en una tabla nueva o existente. Por ejemplo, se usa un proveedor ADO.NET para ODBC para cargar datos en un destino ODBC."
+              name="fact_transferencias"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de destino."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">"fact_transferencias"</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifique el número de filas por lote. El valor predeterminado es 0, que utiliza el mismo tamaño que el búfer interno de SSIS. "
+                  expressionType="Notify"
+                  name="BatchSize">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito. "
+                  expressionType="Notify"
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Especifica si se debe usar la interfaz SqlBulkCopy para mejorar el rendimiento de las operaciones de inserción masiva. No todos los proveedores admiten esta interfaz."
+                  expressionType="Notify"
+                  name="UseBulkInsertWhenPossible">true</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.ADONETDestination</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\fact_transferencias\fact_transferencias.Connections[IDbConnection]"
+                  connectionManagerID="{F0606555-A20A-4029-AA50-15B6A01A67EC}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[localhost.BancoDW]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET]"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrada de destino de ADO NET">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[TransferenciaId]"
+                      cachedDataType="i8"
+                      cachedName="TransferenciaId"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[TransferenciaId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TransferenciaId]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[PaymentOrderId]"
+                      cachedDataType="i8"
+                      cachedName="PaymentOrderId"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[PaymentOrderId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[PaymentOrderId]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[ClienteId]"
+                      cachedDataType="i8"
+                      cachedName="ClienteId"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[ClienteId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[ClienteId]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[Fecha]"
+                      cachedDataType="dbDate"
+                      cachedName="Fecha"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[Fecha]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[Fecha]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[MonedaId]"
+                      cachedDataType="i8"
+                      cachedName="MonedaId"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MonedaId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MonedaId]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[CanalId]"
+                      cachedDataType="i8"
+                      cachedName="CanalId"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[CanalId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[CanalId]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[TipoTransferencia]"
+                      cachedDataType="wstr"
+                      cachedLength="20"
+                      cachedName="TipoTransferencia"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[TipoTransferencia]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TipoTransferencia]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[MontoTransferencia]"
+                      cachedDataType="numeric"
+                      cachedName="MontoTransferencia"
+                      cachedPrecision="19"
+                      cachedScale="4"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MontoTransferencia]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoTransferencia]" />
+                    <inputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].Columns[MontoPromedioCliente]"
+                      cachedDataType="numeric"
+                      cachedName="MontoPromedioCliente"
+                      cachedPrecision="38"
+                      cachedScale="6"
+                      externalMetadataColumnId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MontoPromedioCliente]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoPromedioCliente]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[TransferenciaId]"
+                      dataType="i8"
+                      name="TransferenciaId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[PaymentOrderId]"
+                      dataType="i8"
+                      name="PaymentOrderId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[ClienteId]"
+                      dataType="i8"
+                      name="ClienteId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[Fecha]"
+                      dataType="dbTimeStamp"
+                      name="Fecha" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MonedaId]"
+                      dataType="i8"
+                      name="MonedaId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[CanalId]"
+                      dataType="i8"
+                      name="CanalId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[TipoTransferencia]"
+                      dataType="wstr"
+                      length="20"
+                      name="TipoTransferencia" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MontoTransferencia]"
+                      dataType="numeric"
+                      name="MontoTransferencia"
+                      precision="19"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET].ExternalColumns[MontoPromedioCliente]"
+                      dataType="numeric"
+                      name="MontoPromedioCliente"
+                      precision="38"
+                      scale="6" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\fact_transferencias\fact_transferencias.Outputs[Salida de error de destino de ADO NET]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Salida de error de destino de ADO NET"
+                  synchronousInputId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Outputs[Salida de error de destino de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\fact_transferencias\fact_transferencias.Outputs[Salida de error de destino de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\fact_transferencias.Outputs[Salida de error de destino de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\fact_transferencias\fact_transferencias.Outputs[Salida de error de destino de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\fact_transferencias\Origen de ADO NET"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server.;Microsoft Corporation; Microsoft SQL Server; © Microsoft Corporation; Todos los derechos reservados; http://www.microsoft.com/sql/support;4"
+              description="Consume datos de SQL Server, OLE DB, ODBC u Oracle mediante el correspondiente proveedor de datos de .NET Framework. Se usa una instrucción Transact-SQL para definir el conjunto de resultados. Por ejemplo, se extraen datos de SQL Server con el proveedor de datos de .NET Framework para SQL Server."
+              name="Origen de ADO NET"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Especifica la instrucción SQL utilizada por el componente para extraer datos."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT 
+    -- IDs originales (atributos degenerados)
+    t.TransferenciaId,
+    op.PaymentOrderId,
+    
+    -- Foreign Keys para dimensiones
+    tc.ClienteId,
+    CAST(op.FechaSolicitud AS DATE) AS Fecha,
+    op.MonedaId,
+    op.CanalId,
+    t.TipoTransferencia,
+    
+    -- Métricas
+    op.Monto AS MontoTransferencia,
+    AVG(op.Monto) OVER (PARTITION BY tc.ClienteId) AS MontoPromedioCliente
+FROM operaciones.Transferencia t
+INNER JOIN pagos.OrdenPago op 
+    ON t.PaymentOrderId = op.PaymentOrderId
+INNER JOIN nucleo.Cuenta cta 
+    ON op.CuentaOrigenId = cta.CuentaId
+INNER JOIN nucleo.TitularCuenta tc 
+    ON cta.CuentaId = tc.CuentaId
+-- 🔹 Se excluyen los registros ya cargados en el DW
+LEFT JOIN [BancoDW].[dbo].[fact_transferencias] ft 
+    ON t.TransferenciaId = ft.TransferenciaId
+WHERE op.TipoOperacion = 'TRANSFER'
+  AND op.EstadoOperacion = 'EJECUTADA'
+  AND tc.RolTitular = 'OWNER'
+  AND tc.Estado = 1
+  AND ft.TransferenciaId IS NULL  -- ← excluye las transferencias ya existentes
+ORDER BY op.FechaSolicitud;</property>
+                <property
+                  dataType="System.Int32"
+                  description="Número de segundos antes de que se agote el tiempo de espera de un comando. Un valor de 0 indica un tiempo de espera infinito."
+                  name="CommandTimeout">30</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica si se debe permitir que columnas externas que no sean de cadenas se conviertan implícitamente en cadenas en las columnas de salida."
+                  name="AllowImplicitStringConversion">true</property>
+                <property
+                  dataType="System.String"
+                  description="Nombre de la tabla de la base de datos de origen."
+                  expressionType="Notify"
+                  name="TableOrViewName"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especificar el modo de recuperar información de columnas externas"
+                  name="AccessMode"
+                  typeConverter="Microsoft.SqlServer.Dts.Pipeline.DataReaderSourceAdapter+EnumToStringConverter">2</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">Microsoft.DataReaderSourceAdapter</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\fact_transferencias\Origen de ADO NET.Connections[IDbConnection]"
+                  connectionManagerID="{06EB157C-E559-4CC4-92F6-AA9FD41A8C86}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[localhost.BancoDB]"
+                  description="Administrador de conexiones administrado"
+                  name="IDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET]"
+                  name="Salida de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TransferenciaId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[TransferenciaId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TransferenciaId]"
+                      name="TransferenciaId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[PaymentOrderId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[PaymentOrderId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[PaymentOrderId]"
+                      name="PaymentOrderId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[ClienteId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[ClienteId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[ClienteId]"
+                      name="ClienteId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[Fecha]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[Fecha]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[Fecha]"
+                      name="Fecha"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MonedaId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MonedaId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MonedaId]"
+                      name="MonedaId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[CanalId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[CanalId]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[CanalId]"
+                      name="CanalId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TipoTransferencia]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[TipoTransferencia]"
+                      length="20"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[TipoTransferencia]"
+                      name="TipoTransferencia"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoTransferencia]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MontoTransferencia]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoTransferencia]"
+                      name="MontoTransferencia"
+                      precision="19"
+                      scale="4"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoPromedioCliente]"
+                      dataType="numeric"
+                      errorOrTruncationOperation="Conversión"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MontoPromedioCliente]"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].Columns[MontoPromedioCliente]"
+                      name="MontoPromedioCliente"
+                      precision="38"
+                      scale="6"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[TransferenciaId]"
+                      dataType="i8"
+                      name="TransferenciaId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[PaymentOrderId]"
+                      dataType="i8"
+                      name="PaymentOrderId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[ClienteId]"
+                      dataType="i8"
+                      name="ClienteId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[Fecha]"
+                      dataType="dbDate"
+                      name="Fecha" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MonedaId]"
+                      dataType="i8"
+                      name="MonedaId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[CanalId]"
+                      dataType="i8"
+                      name="CanalId" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[TipoTransferencia]"
+                      dataType="wstr"
+                      length="20"
+                      name="TipoTransferencia" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MontoTransferencia]"
+                      dataType="numeric"
+                      name="MontoTransferencia"
+                      precision="19"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET].ExternalColumns[MontoPromedioCliente]"
+                      dataType="numeric"
+                      name="MontoPromedioCliente"
+                      precision="38"
+                      scale="6" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET]"
+                  isErrorOut="true"
+                  name="Salida de error de origen de ADO NET">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[TransferenciaId]"
+                      dataType="i8"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[TransferenciaId]"
+                      name="TransferenciaId" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[PaymentOrderId]"
+                      dataType="i8"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[PaymentOrderId]"
+                      name="PaymentOrderId" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ClienteId]"
+                      dataType="i8"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ClienteId]"
+                      name="ClienteId" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[Fecha]"
+                      dataType="dbDate"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[Fecha]"
+                      name="Fecha" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MonedaId]"
+                      dataType="i8"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MonedaId]"
+                      name="MonedaId" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[CanalId]"
+                      dataType="i8"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[CanalId]"
+                      name="CanalId" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[TipoTransferencia]"
+                      dataType="wstr"
+                      length="20"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[TipoTransferencia]"
+                      name="TipoTransferencia" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MontoTransferencia]"
+                      dataType="numeric"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MontoTransferencia]"
+                      name="MontoTransferencia"
+                      precision="19"
+                      scale="4" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MontoPromedioCliente]"
+                      dataType="numeric"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[MontoPromedioCliente]"
+                      name="MontoPromedioCliente"
+                      precision="38"
+                      scale="6" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de error de origen de ADO NET].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\fact_transferencias.Paths[Salida de origen de ADO NET]"
+              endId="Package\fact_transferencias\fact_transferencias.Inputs[Entrada de destino de ADO NET]"
+              name="Salida de origen de ADO NET"
+              startId="Package\fact_transferencias\Origen de ADO NET.Outputs[Salida de origen de ADO NET]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
   </DTS:Executables>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--Esta sección CDATA contiene la información de diseño del paquete. Esta sección incluye información como, por ejemplo, las coordenadas (x,y), el ancho y el alto.-->
@@ -2186,55 +2676,59 @@ WHERE dt.TipoTransferencia IS NULL;</property>
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
         <NodeLayout
-          Size="132.8,41.6"
-          Id="Package\dimMoneda"
-          TopLeft="21.8518506579193,75.1111105887978" />
+          Size="122.4,41.6"
+          Id="Package\dimCanal"
+          TopLeft="555.314788052514,78.0185184314663" />
         <NodeLayout
           Size="128,41.6"
           Id="Package\dimCliente"
           TopLeft="208.277766698489,77.7222217199979" />
         <NodeLayout
+          Size="132.8,41.6"
+          Id="Package\dimMoneda"
+          TopLeft="21.8518506579193,75.1111105887978" />
+        <NodeLayout
           Size="129.6,41.6"
           Id="Package\dimTiempo"
           TopLeft="373.462944497481,77.8703700757321" />
         <NodeLayout
-          Size="122.4,41.6"
-          Id="Package\dimCanal"
-          TopLeft="555.314788052514,78.0185184314663" />
-        <NodeLayout
           Size="179.2,41.6"
           Id="Package\dimTipoTransferencia"
           TopLeft="89.0185188726507,259.203702565329" />
+        <NodeLayout
+          Size="166.4,41.6"
+          Id="Package\fact_transferencias"
+          TopLeft="270.499985521039,177.099998806715" />
       </GraphLayout>
     </LayoutInfo>
   </Package>
   <TaskHost
-    design-time-name="Package\dimMoneda">
+    design-time-name="Package\dimCanal">
     <LayoutInfo>
       <GraphLayout
         Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="172.8,41.6"
-          Id="Package\dimMoneda\Origen de ADO NET"
+          Id="Package\dimCanal\Origen de ADO NET"
           TopLeft="5.5,5.5" />
         <NodeLayout
-          Size="132.8,41.6"
-          Id="Package\dimMoneda\dimMoneda"
-          TopLeft="26.5000001341104,143.499998390675" />
+          Size="122.4,41.6"
+          Id="Package\dimCanal\dimCanal"
+          TopLeft="33.5000000298023,140.499998435378" />
         <EdgeLayout
-          Id="Package\dimMoneda.Paths[Salida de origen de ADO NET]"
-          TopLeft="92.4000000670552,47.1">
+          Id="Package\dimCanal.Paths[Salida de origen de ADO NET]"
+          TopLeft="93.3000000149012,47.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,96.3999983906746"
+              EndConnector="0,93.3999984353781"
               Start="0,0"
-              End="0,88.8999983906746">
+              End="0,85.8999984353781">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,88.8999983906746" />
+                    End="0,85.8999984353781" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -2247,7 +2741,7 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\dimMoneda\Origen de ADO NET">
+    design-time-name="Package\dimCanal\dimCanal">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2255,7 +2749,7 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\dimMoneda\dimMoneda">
+    design-time-name="Package\dimCanal\Origen de ADO NET">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2301,7 +2795,7 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\dimCliente\Origen de ADO NET">
+    design-time-name="Package\dimCliente\dimCliente">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2309,7 +2803,61 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\dimCliente\dimCliente">
+    design-time-name="Package\dimCliente\Origen de ADO NET">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\dimMoneda">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="132.8,41.6"
+          Id="Package\dimMoneda\dimMoneda"
+          TopLeft="26.5000001341104,143.499998390675" />
+        <NodeLayout
+          Size="172.8,41.6"
+          Id="Package\dimMoneda\Origen de ADO NET"
+          TopLeft="5.5,5.5" />
+        <EdgeLayout
+          Id="Package\dimMoneda.Paths[Salida de origen de ADO NET]"
+          TopLeft="92.4000000670552,47.1">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,96.3999983906746"
+              Start="0,0"
+              End="0,88.8999983906746">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,88.8999983906746" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\dimMoneda\dimMoneda">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\dimMoneda\Origen de ADO NET">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2367,14 +2915,6 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\dimTiempo\Origen de ADO NET">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
     design-time-name="Package\dimTiempo\Destino de ADO NET">
     <Properties>
       <Property>
@@ -2382,54 +2922,8 @@ WHERE dt.TipoTransferencia IS NULL;</property>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\dimCanal">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
-        <NodeLayout
-          Size="172.8,41.6"
-          Id="Package\dimCanal\Origen de ADO NET"
-          TopLeft="5.5,5.5" />
-        <NodeLayout
-          Size="122.4,41.6"
-          Id="Package\dimCanal\dimCanal"
-          TopLeft="33.5000000298023,140.499998435378" />
-        <EdgeLayout
-          Id="Package\dimCanal.Paths[Salida de origen de ADO NET]"
-          TopLeft="93.3000000149012,47.1">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,93.3999984353781"
-              Start="0,0"
-              End="0,85.8999984353781">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,85.8999984353781" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\dimCanal\Origen de ADO NET">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <PipelineComponentMetadata
-    design-time-name="Package\dimCanal\dimCanal">
+    design-time-name="Package\dimTiempo\Origen de ADO NET">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2487,7 +2981,7 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\dimTipoTransferencia\Origen de ADO NET">
+    design-time-name="Package\dimTipoTransferencia\dimTipoTransferencia">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -2495,7 +2989,61 @@ WHERE dt.TipoTransferencia IS NULL;</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\dimTipoTransferencia\dimTipoTransferencia">
+    design-time-name="Package\dimTipoTransferencia\Origen de ADO NET">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\fact_transferencias">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="172.8,41.6"
+          Id="Package\fact_transferencias\Origen de ADO NET"
+          TopLeft="59.6666669853859,47.3000001265605" />
+        <NodeLayout
+          Size="166.4,41.6"
+          Id="Package\fact_transferencias\fact_transferencias"
+          TopLeft="58.0000020489095,193.433332652317" />
+        <EdgeLayout
+          Id="Package\fact_transferencias.Paths[Salida de origen de ADO NET]"
+          TopLeft="143.633334517148,88.9000001265605">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,104.533332525757"
+              Start="0,0"
+              End="0,97.0333325257566">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,97.0333325257566" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\fact_transferencias\Origen de ADO NET">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\fact_transferencias\fact_transferencias">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>
